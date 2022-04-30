@@ -1,0 +1,6 @@
+export * from './auth.route'
+export * from './users.route'
+export * from './products.route'
+export * from './lives.route'
+export * from './user_favorites.route'
+export * from './classified.route'
