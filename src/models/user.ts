@@ -23,6 +23,23 @@ const User = new mongoose.Schema(
       default: false,
       select: false,
     },
+    type: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
+    tentativas: {
+      type: Number,
+      trim: true,
+    },
+    dataDownload: {
+      type: String,
+      trim: true,
+    },
+    celular: {
+      type: String,
+      trim: true,
+    },
     email: {
       type: String,
       required: true,

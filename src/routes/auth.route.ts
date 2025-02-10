@@ -45,12 +45,17 @@ authRoute.post(
   authMiddleware,
   admMiddleware,
   async (req: RequestCustom, res) => {
-    const { name, email, password, products } = req.body
+    const { name, email, password, products, type, tentativas, dataDownload, celular } =
+      req.body
     const userCreated = await userController.create({
       name,
       email,
       password,
       products,
+      type,
+      tentativas,
+      dataDownload,
+      celular,
       permissions: [
         {
           screen: '/',
@@ -78,6 +83,45 @@ authRoute.post(
     return res.json(userCreated)
   }
 )
+
+authRoute.post('/register', async (req: RequestCustom, res) => {
+  const { name, email, password, products, type, tentativas, dataDownload, celular } =
+    req.body
+  const userCreated = await userController.create({
+    name,
+    email,
+    password,
+    products,
+    type,
+    tentativas,
+    dataDownload,
+    celular,
+    permissions: [
+      {
+        screen: '/',
+      },
+      {
+        screen: '/products/items',
+      },
+      {
+        screen: '/favorites',
+      },
+    ],
+  })
+  const allProducts = await productsController.findAll()
+
+  if (products?.length > allProducts?.length) {
+    throw NewError('Quantity of products not allowed', 400)
+  }
+
+  userCreated.password = undefined
+  userCreated.createdAt = undefined
+  userCreated.updatedAt = undefined
+  userCreated.enable = undefined
+  userCreated.su = undefined
+
+  return res.json(userCreated)
+})
 
 authRoute.post(
   '/refresh-token',

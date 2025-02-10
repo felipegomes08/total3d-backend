@@ -90,10 +90,32 @@ usersRoute.put('/:_id', authMiddleware, admMiddleware, async (req, res) => {
   return res.json(data)
 })
 
+usersRoute.put('/downloads/:_id', async (req, res) => {
+  const { _id } = req.params
+  const body = req.body
+
+  if (body.products?.length > 0) {
+    for await (const _id of body.products) {
+      const item = await productsController.findAll({ _id })
+
+      if (item.length === 0) {
+        throw NewError('Product not found', 400)
+      }
+    }
+  }
+
+  const data = await userController.updateOne({
+    _id,
+    ...body,
+  })
+
+  return res.json(data)
+})
+
 usersRoute.delete('/:_id', authMiddleware, admMiddleware, async (req, res) => {
   const { _id } = req.params
 
-  const data = await userController.deleteOne(_id)
+  const data = await userController.deleteUser(_id)
 
   return res.json(data)
 })

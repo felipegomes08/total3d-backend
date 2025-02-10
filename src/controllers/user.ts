@@ -17,7 +17,6 @@ export const create = async user => {
 
 export const updateOne = data => {
   const { _id, ...restData } = data
-
   return UserModel.updateOne({ _id }, restData, { runValidators: true })
 }
 
@@ -25,6 +24,11 @@ export const deleteOne = _id => {
   const data = { _id, enable: false }
   return updateOne(data)
 }
+
+export const deleteUser = _id => {
+  return UserModel.deleteOne({ _id }, { runValidators: true })
+}
+
 export const deleteManyProducts = productId => {
   return UserModel.updateMany(
     {},
